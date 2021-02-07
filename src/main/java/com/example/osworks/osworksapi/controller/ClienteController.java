@@ -2,6 +2,7 @@ package com.example.osworks.osworksapi.controller;
 
 import com.example.osworks.osworksapi.model.Cliente;
 import com.example.osworks.osworksapi.repository.ClienteRepository;
+import com.example.osworks.osworksapi.service.CadastroClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,9 @@ public class ClienteController {
 
     @Autowired
     private ClienteRepository clienteRepository;
+
+    @Autowired
+    private CadastroClienteService cadastroClienteService;
 
     @GetMapping("/clientes")
     public List<Cliente> listar() {
@@ -36,7 +40,7 @@ public class ClienteController {
     @PostMapping("/clientes")
     @ResponseStatus(HttpStatus.CREATED)
     public Cliente adicionar(@Valid @RequestBody Cliente cliente){
-        return clienteRepository.save(cliente);
+        return cadastroClienteService.salvar(cliente);
     }
 
     @PutMapping("/clientes/{clienteId}")
@@ -48,7 +52,7 @@ public class ClienteController {
         }
 
         cliente.setId(clienteId);
-        cliente = clienteRepository.save(cliente);
+        cliente = cadastroClienteService.salvar(cliente);
 
         return ResponseEntity.ok(cliente);
     }
@@ -58,7 +62,7 @@ public class ClienteController {
         if (!clienteRepository.existsById(clienteId)){
             return ResponseEntity.notFound().build();
         }
-        clienteRepository.deleteById(clienteId);
+        cadastroClienteService.excluir(clienteId);
 
         return ResponseEntity.noContent().build();
     }
