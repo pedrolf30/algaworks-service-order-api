@@ -1,8 +1,10 @@
 package com.example.osworks.osworksapi.controller;
 
 import com.example.osworks.osworksapi.model.OrdemServico;
+import com.example.osworks.osworksapi.model.OrdemServicoRepresentationModel;
 import com.example.osworks.osworksapi.repository.OrdemServicoRepository;
 import com.example.osworks.osworksapi.service.GestaoOrdemServicoService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,8 @@ public class OrdemServicoController {
     private OrdemServicoRepository ordemServicoRepository;
     @Autowired
     private GestaoOrdemServicoService gestaoOrdemServicoService;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -34,11 +38,13 @@ public class OrdemServicoController {
     }
 
     @GetMapping("/{ordemServicoId}")
-    public ResponseEntity<OrdemServico> buscar(@PathVariable Long ordemServicoId){
+    public ResponseEntity<OrdemServicoRepresentationModel> buscar(@PathVariable Long ordemServicoId){
         Optional<OrdemServico> ordemServico = ordemServicoRepository.findById(ordemServicoId);
 
         if (ordemServico.isPresent()){
-            return ResponseEntity.ok(ordemServico.get());
+            OrdemServicoRepresentationModel ordemServicoRepresentationModel = modelMapper
+                    .map(ordemServico.get(), OrdemServicoRepresentationModel.class);
+            return ResponseEntity.ok(ordemServicoRepresentationModel);
         }
 
         return ResponseEntity.notFound().build();
