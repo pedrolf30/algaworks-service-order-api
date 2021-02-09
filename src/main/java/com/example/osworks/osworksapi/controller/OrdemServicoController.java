@@ -1,6 +1,7 @@
 package com.example.osworks.osworksapi.controller;
 
 import com.example.osworks.osworksapi.model.OrdemServico;
+import com.example.osworks.osworksapi.model.OrdemServicoInput;
 import com.example.osworks.osworksapi.model.OrdemServicoRepresentationModel;
 import com.example.osworks.osworksapi.repository.OrdemServicoRepository;
 import com.example.osworks.osworksapi.service.GestaoOrdemServicoService;
@@ -29,7 +30,8 @@ public class OrdemServicoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public OrdemServicoRepresentationModel criar(@Valid @RequestBody OrdemServico ordemServico){
+    public OrdemServicoRepresentationModel criar(@Valid @RequestBody OrdemServicoInput ordemServicoInput){
+        OrdemServico ordemServico = toEntity(ordemServicoInput);
         return toModel( gestaoOrdemServicoService.criar(ordemServico));
     }
 
@@ -59,5 +61,9 @@ public class OrdemServicoController {
         return ordensServico.stream()
                 .map(ordemServico -> toModel(ordemServico))
                 .collect(Collectors.toList());
+    }
+
+    private OrdemServico toEntity(OrdemServicoInput ordemServicoInput){
+        return modelMapper.map(ordemServicoInput, OrdemServico.class);
     }
 }
