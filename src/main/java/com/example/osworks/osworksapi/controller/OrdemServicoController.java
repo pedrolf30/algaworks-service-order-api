@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -28,13 +29,13 @@ public class OrdemServicoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public OrdemServico criar(@Valid @RequestBody OrdemServico ordemServico){
-        return gestaoOrdemServicoService.criar(ordemServico);
+    public OrdemServicoRepresentationModel criar(@Valid @RequestBody OrdemServico ordemServico){
+        return toModel( gestaoOrdemServicoService.criar(ordemServico));
     }
 
     @GetMapping
-    public List<OrdemServico> listar(){
-        return ordemServicoRepository.findAll();
+    public List<OrdemServicoRepresentationModel> listar(){
+        return toCollectionModel(ordemServicoRepository.findAll());
     }
 
     @GetMapping("/{ordemServicoId}")
@@ -42,11 +43,21 @@ public class OrdemServicoController {
         Optional<OrdemServico> ordemServico = ordemServicoRepository.findById(ordemServicoId);
 
         if (ordemServico.isPresent()){
-            OrdemServicoRepresentationModel ordemServicoRepresentationModel = modelMapper
-                    .map(ordemServico.get(), OrdemServicoRepresentationModel.class);
+            OrdemServicoRepresentationModel ordemServicoRepresentationModel = toModel(ordemServico.get());
             return ResponseEntity.ok(ordemServicoRepresentationModel);
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    private OrdemServicoRepresentationModel toModel(OrdemServico ordemServico){
+        return modelMapper
+                .map(ordemServico, OrdemServicoRepresentationModel.class);
+    }
+
+    private List<OrdemServicoRepresentationModel> toCollectionModel(List<OrdemServico> ordensServico){
+        return ordensServico.stream()
+                .map(ordemServico -> toModel(ordemServico))
+                .collect(Collectors.toList());
     }
 }
