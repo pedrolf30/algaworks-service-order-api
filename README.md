@@ -7,7 +7,7 @@
 * Java 11
 * Docker
 * IntelliJ Community
-*Maeven
+* Maeven
 
 ## DataBase
 
