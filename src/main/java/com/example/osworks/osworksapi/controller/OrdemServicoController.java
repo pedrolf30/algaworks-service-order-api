@@ -52,6 +52,12 @@ public class OrdemServicoController {
         return ResponseEntity.notFound().build();
     }
 
+    @PutMapping("/{ordemServicoId}/finalizacao")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void finalizar(@PathVariable Long ordemServicoId){
+        gestaoOrdemServicoService.finalizar(ordemServicoId);
+    }
+
     private OrdemServicoRepresentationModel toModel(OrdemServico ordemServico){
         return modelMapper
                 .map(ordemServico, OrdemServicoRepresentationModel.class);

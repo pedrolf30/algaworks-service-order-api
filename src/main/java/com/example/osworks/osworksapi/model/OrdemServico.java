@@ -1,5 +1,6 @@
 package com.example.osworks.osworksapi.model;
 
+import com.example.osworks.osworksapi.exception.NegocioException;
 import com.example.osworks.osworksapi.service.ValidationGroups;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -124,5 +125,14 @@ public class OrdemServico {
 
     public void setComentarios(List<Comentario> comentarios) {
         this.comentarios = comentarios;
+    }
+
+    public void finalizar() {
+        if (!StatusOrdemServico.ABERTA.equals(getStatus())){
+            throw new NegocioException("Ordem de serviço não pode ser finalizada");
+        }
+
+        setStatus(StatusOrdemServico.FINALIZADA);
+        setDataFinalizacao(OffsetDateTime.now());
     }
 }

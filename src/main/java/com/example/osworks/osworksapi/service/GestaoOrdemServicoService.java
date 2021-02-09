@@ -49,4 +49,13 @@ public class GestaoOrdemServicoService {
 
         return comentarioRepository.save(comentario);
     }
+
+    public void finalizar(Long ordemServicoId){
+        OrdemServico ordemServico = ordemServicoRepository.findById(ordemServicoId)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Ordem de serviço não encontrada"));
+
+        ordemServico.finalizar();
+
+        ordemServicoRepository.save(ordemServico);
+    }
 }
