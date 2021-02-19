@@ -32,7 +32,7 @@ sudo docker exec -it container_name /bin/bash
 + MySQL Driver
 + ModelMapper
 
-#### Projeto feito por [Pedro Ferrareso](https://github.com/pedrolf30) com apoio de [Algaworks](https://www.instagram.com/dev.thay/)
+#### Projeto feito por [Pedro Ferrareso](https://github.com/pedrolf30) com apoio de [Algaworks](https://www.algaworks.com/)
 
 
 
